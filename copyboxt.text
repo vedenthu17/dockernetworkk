@@ -1,0 +1,74 @@
+Milkyway Network
+
+spiderman - 172.20.0.2/16
+ironman - 172.20.0.3/16
+docterstrange - 172.20.0.4/16
+
+Accessing the folder on host disk at the docker container
+Mounting the voulmes
+
+HOST : /Downloads/data
+container : /home/ubuntu/vedant
+
+Even on deletion of the container the data should exsit
+
+
+C:\Users\vedan\OneDrive\Desktop\dockernetwork>docker run -it --rm -v "C:\Users\vedan\OneDrive\Desktop\ccextractor:/home/ubuntu" ubuntu
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+817807f3c64e: Pull complete
+Digest: sha256:186072bba1b2f436cbb91ef2567abca677337cfc786c86e107d25b7072feef0c
+Status: Downloaded newer image for ubuntu:latest
+root@a7187e485700:/# ls
+bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
+boot  etc  lib   media  opt  root  sbin  sys  usr
+root@a7187e485700:/# cd home
+root@a7187e485700:/home# cd ubuntu
+root@a7187e485700:/home/ubuntu# ls
+ccextractor
+root@a7187e485700:/home/ubuntu# ls ccextractor/
+Dictionary   README.md    docker  icon   package_creators  src    windows
+LICENSE.txt  Vagrantfile  docs    linux  packaging         tests
+OpenBSD      WORKSPACE    fonts   mac    snap              tools
+root@a7187e485700:/home/ubuntu# cd ccextractor/
+root@a7187e485700:/home/ubuntu/ccextractor# cat >> secret.txt
+I am a secret file
+^C
+root@a7187e485700:/home/ubuntu/ccextractor# cat secret.txt
+I am a secret file
+root@a7187e485700:/home/ubuntu/ccextractor# ^C
+root@a7187e485700:/home/ubuntu/ccextractor#
+exit
+
+C:\Users\vedan\OneDrive\Desktop\dockernetwork>docker run -it --rm -v "C:\Users\vedan\OneDrive\Desktop\ccextractor:/home/ubuntu" ubuntu
+root@1e2ca0a09d89:/#
+
+
+Custom Volume Creation
+
+
+// Custom docker volumes that can be access by many containers at 
+// a time
+C:\Users\vedan\OneDrive\Desktop\dockernetwork>docker run -it --rm -v custom-data:/server ubuntu
+root@b9799b945578:/# ls
+bin   dev  home  lib64  mnt  proc  run   server  sys  usr
+boot  etc  lib   media  opt  root  sbin  srv     tmp  var
+root@b9799b945578:/# cd server
+root@b9799b945578:/server# cat >> test.txt
+i am your neighbour
+^C
+root@b9799b945578:/server# cat test.txt
+i am your neighbour
+root@b9799b945578:/server#
+exit
+
+C:\Users\vedan\OneDrive\Desktop\dockernetwork>docker run -it --rm -v custom-data:/server busybox
+/ # ls
+bin     etc     lib     proc    server  tmp     var
+dev     home    lib64   root    sys     usr
+/ # cd server/
+/server # ls
+test.txt
+/server # cat test.txt
+i am your neighbour
+/server #
